@@ -1,0 +1,26 @@
+<div>
+    <ul style="white-space:nowrap">
+        <li ng-disable="conf.currentPage == 1" ng-click="prevPage()" style="display:inline-block;">
+            <button href="#"><</button>
+        </li>
+        <li style="display:inline-block;">
+            <div>
+                <div>第<input style="width: 50px;" type="text" ng-model="conf.currentPage" ng-change="linkPage()">页</div>
+            </div>
+        </li>
+        <li ng-disable="conf.currentPage == page.limit" ng-click="nextPage($event)" style="display:inline-block;">
+            <button href="#">></button>
+        </li>
+        <li style="display:inline-block;">
+            <div>
+                <div>
+                    一页<select ng-options="limit for limit in conf.pageLimit" ng-model="conf.itemPageLimit"
+                              ng-change="selectPage()"></select>条
+                </div>
+            </div>
+        </li>
+        <li style="display:inline-block;">
+            <div>共<span>{{page.limit}}</span>页</div>
+        </li>
+    </ul>
+</div>

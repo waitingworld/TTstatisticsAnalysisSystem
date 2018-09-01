@@ -1,0 +1,33 @@
+<div ng-controller="baseController">
+    <div>angularJS指令测试：
+        <test></test>
+    </div>
+    <div style="width: 50%">
+        <button ng-click="getAllCityDate()" class="button">表格测试：获取城市信息</button>
+        <table class="table table-bordered">
+            <thead>
+            <th style="white-space: nowrap">序号</th>
+            <th>城市ID</th>
+            <th>城市名</th>
+            <th>所在国家编码</th>
+            <th>区域</th>
+            <th>人口数</th>
+            </thead>
+            <tbody>
+            <tr ng-repeat="city in citys">
+                <td>{{$index+1}}</td>
+                <td>{{city.id}}</td>
+                <td>{{city.name}}</td>
+                <td>{{city.country_code}}</td>
+                <td>{{city.district}}</td>
+                <td>{{city.population}}</td>
+            </tr>
+            </tbody>
+        </table>
+        <page-directive conf="paginationConf"></page-directive>
+    </div>
+    <div>
+        HTML5绘图测试：点击绘制
+        <canvas id="canvas_id" style="border: 1px solid black;" ng-click="drawCanvas($event)"></canvas>
+    </div>
+</div>
