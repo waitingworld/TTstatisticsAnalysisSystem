@@ -1,5 +1,5 @@
 //创建Angularjs应用模块。
-define(["angular", "angularAMD", "uiRouter"], function (angular, angularAMD) {
+define(["angular", "angularAMD", "uiRouter", "bootstrap", "uiBootstrap"], function (angular, angularAMD) {
     var registerRoutes = function ($stateProvider, $urlRouterProvider) {
         var baseControllerURL = './controller/';
         var basePagesURL = './app/pages/';
@@ -8,7 +8,7 @@ define(["angular", "angularAMD", "uiRouter"], function (angular, angularAMD) {
             url: '/home',
             templateUrl: basePagesURL + 'home.html',
             controllerUrl: baseControllerURL + 'baseController'
-        })).state('firstPage', angularAMD.route({
+        }))/*.state('firstPage', angularAMD.route({
             url: '/firstPage',
             templateUrl: basePagesURL + 'firstPage.html',
             controllerUrl: baseControllerURL + 'firstController'
@@ -16,9 +16,9 @@ define(["angular", "angularAMD", "uiRouter"], function (angular, angularAMD) {
             url: '/secondPage',
             templateUrl: basePagesURL + 'secondPage.html',
             controllerUrl: baseControllerURL + 'secondController'
-        }));
+        }))*/;
     };
-    var app = angular.module("app", ["ui.router"]);
+    var app = angular.module("app", ["ui.router","ui.bootstrap"]);
     app.config(["$stateProvider", "$urlRouterProvider", registerRoutes]);
     return angularAMD.bootstrap(app);
 });

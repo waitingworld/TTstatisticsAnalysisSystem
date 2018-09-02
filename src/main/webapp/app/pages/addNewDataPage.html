@@ -1,0 +1,70 @@
+<div ng-init="init()" style="height: 335px;">
+    <div class="text-right" style="margin-top: 1%">
+        <button class="btn btn-default" ng-click="cancel()">X</button>
+    </div>
+    <div class="text-center"><h2>添加统计数据</h2></div>
+    <form class="text-center" style="margin-top:5%">
+        <div style="margin-top: 1%;" class="text-center">
+            <input type="text" ng-model="model.examination_name" class="form-control"
+                   placeholder="年份+省份或者中国+考试类型（国考|省考）+试卷类型（申论|行测）">
+        </div>
+        <div style="margin-top: 1%" class="text-center">
+            <div class="btn-group">
+                <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+                    <span class="buttonText1">请选择题目一级类型</span>
+                    <span class="caret"></span>
+                </button>
+                <ul class="dropdown-menu" role="menu">
+                    <li ng-repeat="type1 in types_1"><a href="#" ng-click="chooseType(type1)">{{type1.name}}</a></li>
+                </ul>
+            </div>
+
+            <div class="btn-group" ng-show="types_2.length>0">
+                <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+                    <span class="buttonText2">请选择题目二级类型</span>
+                    <span class="caret"></span>
+                </button>
+                <ul class="dropdown-menu" role="menu">
+                    <li ng-repeat="type2 in types_2"><a href="#" ng-click="chooseType(type2)">{{type2.name}}</a></li>
+                </ul>
+            </div>
+
+            <div class="btn-group" ng-show="types_3.length>0">
+                <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+                    <span class="buttonText3">请选择题目三级类型</span>
+                    <span class="caret"></span>
+                </button>
+                <ul class="dropdown-menu" role="menu">
+                    <li ng-repeat="type3 in types_3"><a href="#" ng-click="chooseType(type3)">{{type3.name}}</a></li>
+                </ul>
+            </div>
+
+            <div class="btn-group" ng-show="types_4.length>0">
+                <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+                    <span class="buttonText4">请选择题目四级类型</span>
+                    <span class="caret"></span>
+                </button>
+                <ul class="dropdown-menu" role="menu">
+                    <li ng-repeat="type4 in types_4"><a href="#" ng-click="chooseType(type4)">{{type4.name}}</a></li>
+                </ul>
+            </div>
+            <div style="width: 60%;margin-top: 1%;" class="input-group col-md-6 col-md-offset-3">
+                <input type="number" ng-model="model.right_number" class="form-control pull-left" placeholder="正确题目数"
+                       style="width: 50%">
+                <input type="number" ng-model="model.total_number" class="form-control pull-left" placeholder="总题数"
+                       style="width: 50%">
+            </div>
+            <div style="width: 60%;margin-top: 1%;" class="input-group col-md-6 col-md-offset-3">
+                <input type="number" ng-model="model.finish_time" class="form-control pull-left" placeholder="使用时间(分钟)"
+                       style="width: 50%">
+
+                <input type="date" id="finish_data" data-date-format="yyyy-mm-dd hh:ii" ng-model="model.finish_data"
+                       class="form-control pull-left form_datetime" placeholder="答题日期" style="width: 50%">
+            </div>
+        </div>
+    </form>
+    <div class="text-center" style="margin-top: 1%">
+        <button class="btn btn-success" ng-click="ok()">确定</button>
+        <button class="btn btn-danger" ng-click="cancel()">取消</button>
+    </div>
+</div>

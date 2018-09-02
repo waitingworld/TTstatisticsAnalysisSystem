@@ -11,7 +11,7 @@
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <script type="text/javascript" data-main='<%=basePath%>/app/main.js'
             src="<%=basePath%>/app/external_library/require/require.js"></script>
-    <title>BaseIndexJSP</title>
+    <title>首页</title>
 </head>
 <body>
 <div ng-include="'<%=basePath%>/app/pages/navigationBar.html'"></div>

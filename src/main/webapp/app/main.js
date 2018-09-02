@@ -14,7 +14,12 @@ requirejs.config({
         "domReady": "./external_library/require/domReady",
         "jquery": "./external_library/jquery/jquery-3.3.1",
         "bootstrap": "./external_library/bootstrap/bootstrap.min",
+        "echarts": "./external_library/echarts/echarts",
         "bootstrap-css": "./external_library/bootstrap/bootstrap",
+        "uiBootstrap": "./external_library/bootstrap/ui-bootstrap-tpls",
+        "datetimepicker": "./external_library/bootstrap/bootstrap-datetimepicker",
+        "datetimepicker.zh-CN": "./external_library/bootstrap/bootstrap-datetimepicker.zh-CN",
+        "datetimepicker-css": "./external_library/bootstrap/bootstrap-datetimepicker",
         "base-css": "./css/baseCss",
         "bootstrap-theme": "./external_library/bootstrap/bootstrap-theme",
         "math": "./external_library/math/Math.uuid",
@@ -25,6 +30,7 @@ requirejs.config({
         "baseDirective": "./directive/baseDirective",
         "pageDirective": "./external_library/page_directive/page-directive",
         "app": "./app",
+        "baseModel": "./model/baseModule",
         "baseService": "./service/baseService"
     },
     map: {
@@ -40,6 +46,18 @@ requirejs.config({
         'bootstrap': {
             deps: ['jquery', 'css!./bootstrap-theme', 'css!./bootstrap-css']
         },
+        'uiBootstrap': {
+            deps: ['jquery', 'angular']
+        },
+        'datetimepicker': {
+            deps: ['jquery', 'angular', 'bootstrap', 'css!./datetimepicker-css']
+        },
+        'datetimepicker.zh-CN': {
+            deps: ['datetimepicker']
+        },
+        'baseModel': {
+            deps: ['jquery', 'angular']
+        },
         'uiRouter': {
             deps: ['angular'],
             exports: 'angular-route'
@@ -50,6 +68,6 @@ requirejs.config({
             experts: "ngLoad"
         }
     },
-    deps: ['app','css!base-css'],//首先启动初始化的JavaScript，用来手动启动angularjs应用
+    deps: ['app', 'css!base-css'],//首先启动初始化的JavaScript，用来手动启动angularjs应用
     urlArgs: "v=" + (new Date()).getTime()//防止读取缓存，调试用
 });
