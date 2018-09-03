@@ -1,8 +1,7 @@
 <div ng-controller="baseController">
     <button ng-click="addNewData()" class="btn btn-primary btn-lg">录入数据</button>
-    <div ng-repeat="type in types">
-        <div>
-            {{type.name}}<line_bar id="lineBar" data="{{data}}" type_id="{{type.id}}"></line_bar>
-        </div>
+
+    <div>
+        <graph_bar id="graphBar" data="{{data}}"></graph_bar>
     </div>
 </div>

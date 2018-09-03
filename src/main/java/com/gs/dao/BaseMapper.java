@@ -11,6 +11,7 @@ import java.util.List;
 public interface BaseMapper {
     /**
      * 获取下一等级的题目类型
+     *
      * @param data
      * @return
      */
@@ -18,6 +19,7 @@ public interface BaseMapper {
 
     /**
      * 获取类型的最高等级
+     *
      * @param data
      * @return
      */
@@ -25,8 +27,19 @@ public interface BaseMapper {
 
     /**
      * 添加新的数据
+     *
      * @param data
      * @return
      */
     boolean addNewData(JSONObject data);
+
+    /**
+     * 通过指定的类型id统计数据库中的正确题数和总题数
+     *
+     * @param type_ids
+     * @return
+     */
+    JSONObject countByType(List<String> type_ids);
+
+    float getAllCountPercent();
 }

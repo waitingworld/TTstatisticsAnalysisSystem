@@ -10,6 +10,9 @@ define(['app'],function (baseApp) {
         factory.getMaxTypeLevel = function(postDate){
             return factory.sendData("baseController/getMaxTypeLevel",postDate);
         }
+        factory.getTypeMap = function(postDate){
+            return factory.sendData("baseController/getTypeMap",postDate);
+        }
         factory.sendData = function (url, params) {
             var defer = $q.defer();
             $http({

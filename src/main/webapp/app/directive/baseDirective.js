@@ -1,22 +1,28 @@
 define(['app', 'angular', 'baseService', 'echarts'], function (webapp, angular, baseService, echarts) {//angular指令js
-    webapp.directive("lineBar", function ($timeout) {
+    webapp.directive("graphBar", function ($timeout) {
         return {
             restrict: 'E',
             replace: true,
             scope: {
-                data: '@',
-                type_id: '@'
+                data: '@'
             },
             template: '<div style="width: 900px;height: 400px"></div>',
             link: function (scope) {
-                scope.data = eval('(' + scope.data + ')');
-                console.log('lineBar running');
-                var dom = document.getElementById("lineBar");
-                var myChart = echarts.init(dom);
-                var option = scope.data;
-                if (option && typeof option === "object") {
-                    myChart.setOption(option, true);
-                }
+                scope.$watch("data", function (data) {
+                    console.log('graphBar running');
+                    debugger
+                    if (data == "{}" || angular.isObject(data)) {
+                        return;
+                    }
+                    scope.data = eval('(' + data + ')');
+                    var dom = document.getElementById("graphBar");
+                    var myChart = echarts.init(dom);
+                    var option = scope.data;
+                    if (option && typeof option === "object") {
+                        myChart.setOption(option, true);
+                    }
+                });
+
             }
         };
     });

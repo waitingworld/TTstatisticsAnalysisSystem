@@ -62,4 +62,20 @@ public class BaseController {
         result.put("success", true);
         return result;
     }
+
+    @ResponseBody
+    @RequestMapping("/getTypeMap")
+    public JSONObject getTypeMap(@RequestBody JSONObject data, HttpServletRequest request) {
+        logger.info("baseController:getTypeMap,{}", data.toJSONString());
+        JSONObject result = new JSONObject();
+        try {
+            JSONObject options = baseService.getTypeMap(data);
+            result.put("options", options);
+        } catch (RuntimeException e) {
+            e.printStackTrace();
+            result.put("success", false);
+        }
+        result.put("success", true);
+        return result;
+    }
 }

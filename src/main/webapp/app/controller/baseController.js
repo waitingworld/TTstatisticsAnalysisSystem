@@ -1,26 +1,12 @@
 define(['app', 'angular', 'baseService', 'baseDirective', 'pageDirective', 'jquery', 'uiBootstrap', 'datetimepicker.zh-CN'], function (webapp) {//主控制器
     webapp.controller('baseController', function ($scope, baseService, $interval, $uibModal) {
         console.log("baseController");
-        $scope.data = {
-            xAxis: {
-                type: 'category',
-                data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
-            },
-            yAxis: {
-                type: 'value'
-            },
-            series: [{
-                data: [820, 932, 901, 934, 1290, 1330, 1320],
-                type: 'line'
-            }]
-        };
-        var params = {
-            level: 1
-        };
-        var promise = baseService.getNextTypes(params);
+        $scope.data = {};
+        var params = {};
+        var promise = baseService.getTypeMap(params);
         promise.then(function (data) {
             if (data.success) {
-                $scope.types = data.types;
+                $scope.data = data.options;
             }
         });
         $scope.addNewData = function () {

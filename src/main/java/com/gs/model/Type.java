@@ -4,6 +4,7 @@ public class Type {
     private String id;//主键
     private String name;//类型名称
     private int level;//类型等级
+    private String parentId;//父节点
 
     public String getId() {
         return id;
@@ -27,5 +28,13 @@ public class Type {
 
     public void setLevel(int level) {
         this.level = level;
+    }
+
+    public String getParentId() {
+        return parentId;
+    }
+
+    public void setParentId(String parentId) {
+        this.parentId = parentId;
     }
 }
