@@ -13,7 +13,7 @@
             src="<%=basePath%>/app/external_library/require/require.js"></script>
     <title>首页</title>
 </head>
-<body>
+<body style="background-color: rgb(5, 30, 61)">
 <div ng-include="'<%=basePath%>/app/pages/navigationBar.html'"></div>
 <div ui-view></div>
 </body>

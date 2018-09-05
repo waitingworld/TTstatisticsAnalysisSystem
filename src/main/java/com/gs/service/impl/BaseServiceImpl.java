@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -60,6 +61,10 @@ public class BaseServiceImpl implements BaseService {
     public JSONObject getTypeMap(JSONObject data) {
         JSONObject options = new JSONObject();
         JSONObject legend = new JSONObject();
+        JSONObject textStyle = new JSONObject();
+        textStyle.put("color", "#ffffff");
+        textStyle.put("fontSize", "18");
+        legend.put("textStyle", textStyle);
         List<String> legend_data = new ArrayList<>();
         List<JSONObject> series = new ArrayList<>();
         JSONObject series_item = new JSONObject();
@@ -68,10 +73,23 @@ public class BaseServiceImpl implements BaseService {
         List<JSONObject> series_item_data = new ArrayList<>();
 
         JSONObject root_node = new JSONObject();
-        root_node.put("name", "总计");
         root_node.put("id", "0");
-        root_node.put("value", baseMapper.getAllCountPercent() + "%");
+        float rootValue = baseMapper.getAllCountPercent();
+        String valueStr = rootValue + "";
+        if (valueStr.length() > 5) {
+            valueStr = valueStr.substring(0, Integer.valueOf(valueStr.indexOf(".")) + 2);
+            rootValue = Float.valueOf(valueStr);
+        }
+        root_node.put("value", rootValue);
+        root_node.put("name", "总计 : " + rootValue + "%");
+//        rootValue = (rootValue / 100) * 30;
+        root_node.put("symbolSize", (rootValue < 10 ? 10 : rootValue));//节点正确率
         root_node.put("category", 0);
+
+        label.put("show", true);//是否展示标题
+        label.put("textStyle", textStyle);
+        label.put("position", "inside");
+        root_node.put("label", label);
         series_item_data.add(root_node);
 
         List<JSONObject> categories = new ArrayList<>();
@@ -95,7 +113,11 @@ public class BaseServiceImpl implements BaseService {
         JSONObject nodeParam = new JSONObject();
         List<Type> allTypes = baseMapper.getNextTypes(nodeParam);
         for (Type type : allTypes) {
-            series_item_data.add(createNode(type, maxTypeLevel));
+            JSONObject node = createNode(type, maxTypeLevel);
+            if (node == null) {
+                continue;
+            }
+            series_item_data.add(node);
             JSONObject edges_data_item = new JSONObject();
             if (type.getLevel() == 1) {
                 edges_data_item.put("source", "0");
@@ -108,22 +130,32 @@ public class BaseServiceImpl implements BaseService {
         series_item.put("type", "graph");
         series_item.put("layout", "force");
         series_item.put("animation", false);
-        normal.put("position", "right");
-        normal.put("formatter", "{b}");
-        label.put("normal", normal);
-        series_item.put("label", label);
+//        normal.put("position", "right");
+//        normal.put("formatter", "{b}");
+//        label.put("normal", normal);
+//        series_item.put("label", label);
         series_item.put("draggable", true);
         series_item.put("data", series_item_data);
         series_item.put("categories", categories);
         force.put("edgeLength", 5);
-        force.put("repulsion", 20);
-        force.put("gravity", 0.2);
+        force.put("repulsion", 10000);//斥力因子
+        force.put("initLayout", "circular");
+        force.put("gravity", 0.2);//引力因子
         series_item.put("force", force);
+        series_item.put("roam", true);//开启缩放
+        series_item.put("focusNodeAdjacency", true);//开启缩放
         series_item.put("edges", edges);
         series.add(series_item);
         legend.put("data", legend_data);
         options.put("legend", legend);
         options.put("series", series);
+
+//        JSONObject tooltip = new JSONObject();
+//        tooltip.put("show", true);
+//        tooltip.put("trigger", "item");
+//        tooltip.put("alwaysShowContent", true);
+//        tooltip.put("formatter", "{b}:{c}%");
+//        options.put("tooltip", tooltip);
         return options;
     }
 
@@ -135,7 +167,6 @@ public class BaseServiceImpl implements BaseService {
      */
     private JSONObject createNode(Type type, Integer maxTypeLevel) {
         JSONObject node = new JSONObject();
-        node.put("name", type.getName());//节点名称
         Integer total = 0;
         Integer right = 0;
         //获取所有子节点的值
@@ -149,10 +180,35 @@ public class BaseServiceImpl implements BaseService {
         }
         if (total == 0) {
             total = 1;
+            return null;
         }
         node.put("id", type.getId());
-        node.put("value", ((right * 1.0) / total) * 100 + "%");//节点正确率
+        node.put("level", type.getLevel());
+        double value = ((right * 1.0) / total) * 100;
+        String valueStr = value + "";
+        if (valueStr.length() > 5) {
+            valueStr = valueStr.substring(0, Integer.valueOf(valueStr.indexOf(".")) + 2);
+            value = Double.valueOf(valueStr);
+        }
+        node.put("name", type.getName() + "  :  " + value + "%");//节点名称
+        node.put("value", value);//节点正确率
+//        double size = (value / 100) * 30;
+        double size = value;
+        if (size < 10) {
+            size = 10;
+        }
+        node.put("symbolSize", size);//节点正确率
+        JSONObject label = new JSONObject();
+        label.put("show", true);//是否展示标题
+        label.put("position", "inside");
+
+        JSONObject textStyle = new JSONObject();
+        textStyle.put("color", "#ffffff");
+        textStyle.put("fontSize", "18");
+        label.put("textStyle", textStyle);
+        node.put("label", label);
         node.put("category", type.getLevel());//节点对应的分组
+
         return node;
     }
 
@@ -168,8 +224,8 @@ public class BaseServiceImpl implements BaseService {
         JSONObject param = new JSONObject();
         param.put("parent_id", type.getId());
         List<Type> types = baseMapper.getNextTypes(param);
+        result.add(type.getId());
         for (Type child_type : types) {
-            result.add(child_type.getId());
             if (child_type.getLevel() < maxTypeLevel && !StringUtils.equals(child_type.getId(), type.getId())) {
                 result.addAll(getChildTypeId(child_type, maxTypeLevel));
             }
