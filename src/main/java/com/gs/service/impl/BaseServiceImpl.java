@@ -82,7 +82,6 @@ public class BaseServiceImpl implements BaseService {
         }
         root_node.put("value", rootValue);
         root_node.put("name", "总计 : " + rootValue + "%");
-//        rootValue = (rootValue / 100) * 30;
         root_node.put("symbolSize", (rootValue < 10 ? 10 : rootValue));//节点正确率
         root_node.put("category", 0);
 
