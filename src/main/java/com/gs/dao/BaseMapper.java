@@ -41,5 +41,32 @@ public interface BaseMapper {
      */
     JSONObject countByType(List<String> type_ids);
 
+    /**
+     * 获取总的正确率
+     *
+     * @return
+     */
     float getAllCountPercent();
+
+    /**
+     * 获取折线图的数据
+     *
+     * @param type_ids
+     * @return
+     */
+    List<JSONObject> getLineBarDate(List<String> type_ids);
+
+    /**
+     * 获取总计的折线图的数据
+     *
+     * @return
+     */
+    List<JSONObject> getAllCountPercentLineBar();
+
+    /**
+     * 通过类型id获取类型id
+     * @param typeId
+     * @return
+     */
+    Type getTypeById(String typeId);
 }

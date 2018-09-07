@@ -3,6 +3,9 @@
         <button class="btn btn-default" ng-click="cancel()">X</button>
     </div>
     <div class="text-center">
-        <line_bar id="line_bar" data="{{line_bar_data}}"></line_bar>
+        <span style="font-size: 36px;">{{currentType.name}}</span>
+    </div>
+    <div class="center-block">
+        <line_bar id="line_bar" data="{{line_bar_data}}" class="center-block"></line_bar>
     </div>
 </div>

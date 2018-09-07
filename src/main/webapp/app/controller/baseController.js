@@ -41,20 +41,18 @@ define(['app', 'angular', 'baseService', 'baseDirective', 'pageDirective', 'jque
             };
         })
         .controller('showLineBarCtrl', function ($scope, $uibModalInstance, baseService, typeId) {
-            $scope.line_bar_data = {
-                xAxis: {
-                    type: 'category',
-                    data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
-                },
-                yAxis: {
-                    type: 'value'
-                },
-                series: [{
-                    data: [820, 932, 901, 934, 1290, 1330, 1320],
-                    type: 'line',
-                    smooth: true
-                }]
+            $scope.line_bar_data = {};
+            var param = {
+                typeId: typeId
             };
+            var promise = baseService.getLineBarOptions(param);
+            promise.then(function (data) {
+                if (data.success) {
+                    $scope.line_bar_data = data.options;
+                    $scope.currentType = data.options.currentType;
+                }
+            });
+
             $scope.ok = function () {
                 debugger
                 $uibModalInstance.close();
@@ -102,8 +100,6 @@ define(['app', 'angular', 'baseService', 'baseDirective', 'pageDirective', 'jque
             }
             $scope.getNextTypes = function (currentLevel) {
                 var level = currentLevel + 1;
-                console.log("getNextTypes===parent_id>>>" + $scope.model["type" + currentLevel + "_id"]
-                    + "===currentLevel>>>" + currentLevel);
                 var params = {
                     parent_id: $scope.model["type" + currentLevel + "_id"],
                     level: level

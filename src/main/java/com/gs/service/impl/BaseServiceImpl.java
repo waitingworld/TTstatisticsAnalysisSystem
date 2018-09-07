@@ -12,7 +12,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -230,5 +229,65 @@ public class BaseServiceImpl implements BaseService {
             }
         }
         return result;
+    }
+
+    @Override
+    public JSONObject getLineBarOptions(JSONObject data) {
+        Type type = new Type();
+        String typeId = data.getString("typeId");
+        if (!data.containsKey("typeId") || StringUtils.isEmpty(typeId)) {
+            return null;
+        }
+
+        Integer maxTypeLevel = null;
+        List<String> type_ids = null;
+        List<JSONObject> lineBarDate = null;
+        if (typeId.equals("0")) {
+            lineBarDate = baseMapper.getAllCountPercentLineBar();
+            type.setLevel(0);
+            type.setId("0");
+            type.setName("总计");
+            type.setParentId("0");
+        } else {
+            type = baseMapper.getTypeById(typeId);
+            maxTypeLevel = baseMapper.getMaxTypeLevel(data);
+            type_ids = getChildTypeId(type, maxTypeLevel);
+            lineBarDate = baseMapper.getLineBarDate(type_ids);
+        }
+
+        JSONObject options = new JSONObject();
+        JSONObject xAxis = new JSONObject();
+        JSONObject yAxis = new JSONObject();
+        yAxis.put("type", "value");
+        List<String> xAxis_data = new ArrayList<>();
+        xAxis.put("type", "category");
+        List<JSONObject> series = new ArrayList<>();
+        JSONObject series_item = new JSONObject();
+        List<Double> series_item_data = new ArrayList<>();
+        series_item.put("type", "line");
+        series_item.put("smooth", true);
+        for (JSONObject item : lineBarDate) {
+            Integer right = item.getInteger("right");
+            Integer total = item.getInteger("total");
+            String date = item.getString("finish_date");
+            date = DateUtils.formatDateStr(date, "yyyy-MM-dd hh:mm:ss", "yyyy-MM-dd");
+            double percent = (right * 1.0) / total;
+            String percentStr = percent + "";
+            if (percentStr.length() > 5) {
+                percentStr = percentStr.substring(0, Integer.valueOf(percentStr.indexOf(".")) + 2);
+                percent = Double.valueOf(percentStr);
+            }
+            xAxis_data.add(date);
+            series_item_data.add(percent);
+        }
+        xAxis.put("data", xAxis_data);
+        series_item.put("data", series_item_data);
+        series.add(series_item);
+        options.put("xAxis", xAxis);
+        options.put("yAxis", yAxis);
+        options.put("series", series);
+        type.setName(type.getName() + " 趋势图");
+        options.put("currentType", type);
+        return options;
     }
 }

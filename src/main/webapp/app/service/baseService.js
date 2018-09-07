@@ -13,6 +13,9 @@ define(['app'],function (baseApp) {
         factory.getTypeMap = function(postDate){
             return factory.sendData("baseController/getTypeMap",postDate);
         }
+        factory.getLineBarOptions = function(postDate){
+            return factory.sendData("baseController/getLineBarOptions",postDate);
+        }
         factory.sendData = function (url, params) {
             var defer = $q.defer();
             $http({

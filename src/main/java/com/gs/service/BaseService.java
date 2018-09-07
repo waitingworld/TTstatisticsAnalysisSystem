@@ -33,9 +33,16 @@ public interface BaseService {
     Integer getMaxTypeLevel(JSONObject data);
 
     /**
-     * 获取首页的力导向图的数据
+     * 获取首页的力导向图的配置项
      * @param data
      * @return
      */
     JSONObject getTypeMap(JSONObject data);
+
+    /**
+     * 获取折线图的配置项
+     * @param data
+     * @return
+     */
+    JSONObject getLineBarOptions(JSONObject data);
 }

@@ -78,4 +78,20 @@ public class BaseController {
         result.put("success", true);
         return result;
     }
+
+    @ResponseBody
+    @RequestMapping("/getLineBarOptions")
+    public JSONObject getLineBarOptions(@RequestBody JSONObject data, HttpServletRequest request) {
+        logger.info("baseController:getLineBarOptions,{}", data.toJSONString());
+        JSONObject result = new JSONObject();
+        try {
+            JSONObject options = baseService.getLineBarOptions(data);
+            result.put("options", options);
+        } catch (RuntimeException e) {
+            e.printStackTrace();
+            result.put("success", false);
+        }
+        result.put("success", true);
+        return result;
+    }
 }

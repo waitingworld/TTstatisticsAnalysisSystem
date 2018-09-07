@@ -35,6 +35,7 @@ define(['app', 'angular', 'baseService', 'echarts'], function (webapp, angular, 
                         var modalInstance = $uibModal.open({
                             templateUrl: './app/pages/lineBar.html',
                             controller: "showLineBarCtrl",
+                            size:"lg",
                             resolve: {
                                 typeId: function () {
                                     return params.data.id;
@@ -58,7 +59,7 @@ define(['app', 'angular', 'baseService', 'echarts'], function (webapp, angular, 
             scope: {
                 data: '@'
             },
-            template: '<div style="width: 500px;height: 300px"></div>',
+            template: '<div style="width: 800px;height: 400px"></div>',
             link: function (scope) {
                 scope.$watch("data", function (data) {
                     console.log('lineBar running');

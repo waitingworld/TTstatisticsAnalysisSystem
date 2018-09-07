@@ -24,8 +24,26 @@
         </foreach>
     </select>
 
+    <select id="getLineBarDate" parameterType="java.util.List"
+            resultType="com.alibaba.fastjson.JSONObject">
+        select sum(t.Correct_number) as "right",sum(t.total) as "total",t.finish_date from tb_statistics t where
+        t.type_id in
+        <foreach collection="list" index="index" item="item" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+        group by t.finish_date order by t.finish_date asc
+    </select>
+
     <select id="getAllCountPercent" resultType="java.lang.Float">
         select (sum(t.Correct_number)/sum(t.total))*100 from tb_statistics t
+    </select>
+
+    <select id="getTypeById" resultType="com.gs.model.Type" parameterType="java.lang.String">
+        select * from tb_type t where t.id=#{id}
+    </select>
+
+    <select id="getAllCountPercentLineBar" resultType="com.alibaba.fastjson.JSONObject">
+        select sum(t.Correct_number) as "right",sum(t.total) as "total",t.finish_date from tb_statistics t group by t.finish_date order by t.finish_date asc
     </select>
 
     <select id="getMaxTypeLevel" parameterType="com.alibaba.fastjson.JSONObject" resultType="java.lang.Integer">
