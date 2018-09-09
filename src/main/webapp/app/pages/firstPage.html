@@ -1,1 +1,58 @@
-<div ng-controller="firstController">firstPage.html<test></test></div>
+<div ng-controller="firstController">
+    <div class="panel panel-info result_bg_pane">
+        <div class="panel-heading">
+            <h4 style="font-size: 20px">小仙女统计报告 分析结论<i class="icon-file-alt" style="margin-left: 1%;"></i>
+
+                <div class="pull-right">
+                    <select ng-model="model.examination_name" style="font-size: 22px;margin-top: -10px;"
+                            class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+                        <option ng-repeat="examination_name in examination_names">{{examination_name}}</option>
+                    </select>
+                </div>
+            </h4>
+        </div>
+        <div class="panel-body" style="font-size: 18px">
+            经过统计,你的得分率排行如下:
+            <table class="table table-striped table-bordered table-hover text-center">
+                <thead>
+                <tr>
+                    <th class="text-center">序号</th>
+                    <th class="text-center">类型</th>
+                    <th class="text-center">正确题数</th>
+                    <th class="text-center">总题数</th>
+                    <th class="text-center">每题分值(分)</th>
+                    <th class="text-center">使用时间(分钟)</th>
+                    <th class="text-center">正确率(%)</th>
+                    <th class="text-center">得分</th>
+                    <th class="text-center">每分钟得分(分)</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td>1</td>
+                    <td>数量关系</td>
+                    <td>11</td>
+                    <td>32</td>
+                    <td>1</td>
+                    <td>10</td>
+                    <td>45%</td>
+                    <td>12</td>
+                    <td>2</td>
+                </tr>
+                <tr>
+                    <td>2</td>
+                    <td>言语理解</td>
+                    <td>43</td>
+                    <td>55</td>
+                    <td>0.5</td>
+                    <td>60</td>
+                    <td>86%</td>
+                    <td>45</td>
+                    <td>1</td>
+                </tr>
+                </tbody>
+            </table>
+            根据上述数据计算,推荐你的做题顺序为:<strong>{{"数量关系,言语理解,常识判断"}}</strong>
+        </div>
+    </div>
+</div>

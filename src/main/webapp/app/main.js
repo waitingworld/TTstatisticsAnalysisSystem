@@ -18,10 +18,14 @@ requirejs.config({
         "bootstrap-css": "./external_library/bootstrap/bootstrap",
         "uiBootstrap": "./external_library/bootstrap/ui-bootstrap-tpls",
         "datetimepicker": "./external_library/bootstrap/bootstrap-datetimepicker",
-        "datetimepicker.zh-CN": "./external_library/bootstrap/bootstrap-datetimepicker.zh-CN",
+        "datetimepicker.zh-CN": "./external_library/bootstrap/locales/bootstrap-datetimepicker.zh-CN",
         "datetimepicker-css": "./external_library/bootstrap/bootstrap-datetimepicker",
         "base-css": "./css/baseCss",
+        "bootstrap-table-css": "./external_library/bootstrap/bootstrap-table",
+        "bootstrapTable": "./external_library/bootstrap/bootstrap-table",
+        "bootstrap-table-zh-CN": "./external_library/bootstrap/locales/bootstrap-table-zh-CN",
         "bootstrap-theme": "./external_library/bootstrap/bootstrap-theme",
+        "font-awesome": "./external_library/font_awesome/css/font-awesome",
         "math": "./external_library/math/Math.uuid",
         //自己的JavaScript文件
         "baseController": "./controller/baseController",
@@ -44,16 +48,19 @@ requirejs.config({
             exports: 'angular'
         },
         'bootstrap': {
-            deps: ['jquery', 'css!./bootstrap-theme', 'css!./bootstrap-css']
+            deps: ['jquery', 'css!./bootstrap-theme', 'css!./bootstrap-css', 'css!./font-awesome']
+        },
+        'bootstrapTable': {
+            deps: ['jquery', 'bootstrap','css!./bootstrap-table-css']
+        },
+        'bootstrap-table-zh-CN': {
+            deps: ['bootstrapTable']
         },
         'uiBootstrap': {
             deps: ['jquery', 'angular']
         },
         'datetimepicker': {
-            deps: ['jquery', 'angular', 'bootstrap', 'css!./datetimepicker-css']
-        },
-        'datetimepicker.zh-CN': {
-            deps: ['datetimepicker']
+            deps: ['jquery', 'angular', 'bootstrap','datetimepicker.zh-CN', 'css!./datetimepicker-css']
         },
         'baseModel': {
             deps: ['jquery', 'angular']

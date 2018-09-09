@@ -2,7 +2,7 @@ package com.gs.model;
 
 import java.util.Date;
 
-public class statistics {
+public class Statistics {
     private String id;
     private Type type;
     private Integer total;

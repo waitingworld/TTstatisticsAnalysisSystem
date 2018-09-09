@@ -5,8 +5,22 @@
     <div class="text-center"><h2>添加统计数据</h2></div>
     <form class="text-center" style="margin-top:5%">
         <div style="margin-top: 1%;" class="text-center">
-            <input type="text" ng-model="model.examination_name" class="form-control"
-                   placeholder="年份+省份或者中国+考试类型（国考|省考）+试卷类型（申论|行测）">
+            <!--<input type="text" ng-model="model.examination_name" class="form-control"-->
+            <!--placeholder="年份+省份或者中国+考试类型（国考|省考）+试卷类型（申论|行测）">-->
+            <select ng-model="model.year" placeholder="年份" class="btn btn-default dropdown-toggle"
+                    data-toggle="dropdown">
+                <option ng-repeat="year in years" value="{{year}}">{{year}}</option>
+            </select>
+            <select ng-model="model.area" placeholder="省份|全国" class="btn btn-default dropdown-toggle"
+                    data-toggle="dropdown">
+                <option ng-repeat="area in areas" value="{{area.name}}">{{area.name}}
+                </option>
+            </select>
+            <select ng-model="model.examine_type" placeholder="试卷类型" class="btn btn-default dropdown-toggle"
+                    data-toggle="dropdown">
+                <option value="行测">行测</option>
+                <option value="申论">申论</option>
+            </select>
         </div>
         <div style="margin-top: 1%" class="text-center">
             <div class="btn-group">

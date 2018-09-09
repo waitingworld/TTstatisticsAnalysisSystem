@@ -8,11 +8,11 @@ define(["angular", "angularAMD", "uiRouter", "bootstrap", "uiBootstrap"], functi
             url: '/home',
             templateUrl: basePagesURL + 'home.html',
             controllerUrl: baseControllerURL + 'baseController'
-        }))/*.state('firstPage', angularAMD.route({
+        })).state('firstPage', angularAMD.route({
             url: '/firstPage',
             templateUrl: basePagesURL + 'firstPage.html',
             controllerUrl: baseControllerURL + 'firstController'
-        })).state('secondPage', angularAMD.route({
+        }))/*.state('secondPage', angularAMD.route({
             url: '/secondPage',
             templateUrl: basePagesURL + 'secondPage.html',
             controllerUrl: baseControllerURL + 'secondController'

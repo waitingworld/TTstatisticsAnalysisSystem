@@ -8,14 +8,16 @@ CREATE TABLE `tb_statistics` (
   `finish_time` INT(11) DEFAULT NULL COMMENT '完成题目使用的时间',
   `examination_name` varchar(200) DEFAULT NULL COMMENT '试卷名称，格式：年份+省份或者中国+考试类型（国考|省考）+试卷类型（申论|行测）',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='统计表记录所有的用户输入的信息'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='统计表记录所有的用户输入的信息';
+
 CREATE TABLE `tb_type` (
   `id` varchar(64) NOT NULL,
   `level` int(11) DEFAULT NULL COMMENT '题目类型的级别',
   `name` varchar(45) DEFAULT NULL COMMENT '类型名称',
   `parent_id` varchar(45) DEFAULT NULL COMMENT '父类型id',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='题目类型表'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='题目类型表';
+
 INSERT INTO `ttstatisticsanalysissystemdb`.`tb_type` (`id`, `level`, `name`, `parent_id`) VALUES ('4b3a25958f924f9fbb1985401a3ab434', '1', '言语理解与表达', '4b3a25958f924f9fbb1985401a3ab434');
 INSERT INTO `ttstatisticsanalysissystemdb`.`tb_type` (`id`, `level`, `name`, `parent_id`) VALUES ('4b3a25958f924f9fbb1985401a3ab435', '2', '阅读理解', '4b3a25958f924f9fbb1985401a3ab434');
 INSERT INTO `ttstatisticsanalysissystemdb`.`tb_type` (`id`, `level`, `name`, `parent_id`) VALUES ('4b3a25958f924f9fbb1985401a3ab436', '3', '中心理解', '4b3a25958f924f9fbb1985401a3ab435');
