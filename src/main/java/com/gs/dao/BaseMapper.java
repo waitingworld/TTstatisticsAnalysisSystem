@@ -2,6 +2,7 @@ package com.gs.dao;
 
 import com.alibaba.fastjson.JSONObject;
 import com.gs.model.City;
+import com.gs.model.Statistics;
 import com.gs.model.Type;
 import org.springframework.stereotype.Repository;
 
@@ -69,4 +70,16 @@ public interface BaseMapper {
      * @return
      */
     Type getTypeById(String typeId);
+
+    /**
+     * 获取所有试卷名
+     * @return
+     */
+    List<String> getAllExaminationName(JSONObject data);
+
+    /**
+     * 获取分析列表数据
+     * @return
+     */
+    JSONObject getTableInfoData(JSONObject data);
 }

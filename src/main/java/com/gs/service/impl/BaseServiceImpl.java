@@ -2,8 +2,10 @@ package com.gs.service.impl;
 
 import com.alibaba.fastjson.JSONObject;
 import com.gs.dao.BaseMapper;
+import com.gs.model.Statistics;
 import com.gs.model.Type;
 import com.gs.service.BaseService;
+import com.gs.utils.AlgorithmUtils;
 import com.gs.utils.DateUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
@@ -12,9 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 @Service(value = "baseService")
 @Transactional(rollbackFor = Exception.class)
@@ -182,12 +182,7 @@ public class BaseServiceImpl implements BaseService {
         }
         node.put("id", type.getId());
         node.put("level", type.getLevel());
-        double value = ((right * 1.0) / total) * 100;
-        String valueStr = value + "";
-        if (valueStr.length() > 5) {
-            valueStr = valueStr.substring(0, Integer.valueOf(valueStr.indexOf(".")) + 2);
-            value = Double.valueOf(valueStr);
-        }
+        double value = saveTwoNumber((right * 1.0) / total) * 100;
         node.put("name", type.getName() + "  :  " + value + "%");//节点名称
         node.put("value", value);//节点正确率
 //        double size = (value / 100) * 30;
@@ -271,12 +266,7 @@ public class BaseServiceImpl implements BaseService {
             Integer total = item.getInteger("total");
             String date = item.getString("finish_date");
             date = DateUtils.formatDateStr(date, "yyyy-MM-dd hh:mm:ss", "yyyy-MM-dd");
-            double percent = (right * 1.0) / total;
-            String percentStr = percent + "";
-            if (percentStr.length() > 5) {
-                percentStr = percentStr.substring(0, Integer.valueOf(percentStr.indexOf(".")) + 2);
-                percent = Double.valueOf(percentStr);
-            }
+            double percent = saveTwoNumber((right * 1.0) / total);
             xAxis_data.add(date);
             series_item_data.add(percent);
         }
@@ -289,5 +279,116 @@ public class BaseServiceImpl implements BaseService {
         type.setName(type.getName() + " 趋势图");
         options.put("currentType", type);
         return options;
+    }
+
+    @Override
+    public List<String> getAllExaminationName(JSONObject data) {
+        List<String> names = baseMapper.getAllExaminationName(data);
+        return names;
+    }
+
+    @Override
+    public JSONObject getAnalyzeData(JSONObject data) {
+        List<JSONObject> tableInfo = new ArrayList<>();
+        Integer maxTypeLevel = baseMapper.getMaxTypeLevel(new JSONObject());
+        String suggest = "";
+        JSONObject result = new JSONObject();
+        List<String> typeIds = new ArrayList<>();
+        JSONObject typeIdParams = new JSONObject();
+        typeIdParams.put("level", "1");
+        List<Type> types = getNextTypes(typeIdParams);
+        String examination_name = data.getString("examination_name");
+        int[] weight = new int[types.size()];//放时间
+        double[] value = new double[types.size()];//放得分
+        double[] score_rates = new double[types.size()];//放得分率
+        int maxWeight = 120;//一张试卷的总时间
+        for (int index = 0; index < types.size(); index++) {
+            Type type = types.get(index);
+            double score_per_question = 0;
+            switch (type.getName()) {
+                case "言语理解与表达":
+                    score_per_question = 0.7;
+                    break;
+                case "数量关系":
+                    score_per_question = 1.0;
+                    break;
+                case "判断推理":
+                    score_per_question = 0.7;
+                    break;
+                case "资料分析":
+                    score_per_question = 1.0;
+                    break;
+                case "常识判断":
+                    score_per_question = 0.7;
+                    break;
+            }
+            JSONObject tmpResult = new JSONObject();
+            typeIds = getChildTypeId(type, maxTypeLevel);
+            JSONObject tableParams = new JSONObject();
+            tableParams.put("examination_name", examination_name);
+            tableParams.put("typeIds", typeIds);
+            JSONObject tableInfoData = baseMapper.getTableInfoData(tableParams);
+            if (tableInfoData == null) {
+                types.remove(index);
+                index--;
+                continue;
+            }
+            Integer right = tableInfoData.getInteger("correct_number");
+            Integer total = tableInfoData.getInteger("total");
+            Integer time = tableInfoData.getInteger("finish_time");
+
+            tmpResult.put("type_name", type.getName());//类型名
+            tmpResult.put("right", right);//正确题数
+            tmpResult.put("total", total);//总题数
+            tmpResult.put("score_per_question", score_per_question);//每题分值
+            tmpResult.put("time", time);//使用时间
+            tmpResult.put("right_percent", (saveTwoNumber((right * 1.0 / total) * 100)) + "%");//正确率
+            tmpResult.put("score", saveTwoNumber(right * score_per_question));//得分
+            double score_rate = saveTwoNumber((right * score_per_question) / time);
+            tmpResult.put("score_rate", score_rate);//每分钟得分
+            tableInfo.add(tmpResult);
+            weight[index] = (time);
+            score_rates[index] = score_rate;
+            value[index] = (right * score_per_question);
+        }
+        List<Integer> resultList = AlgorithmUtils.bestResult(weight, value, maxWeight);
+        List<JSONObject> sortJson = new ArrayList<>();
+        for (Integer type_index : resultList) {//拼装排序数据
+            Type currentType = types.get(type_index - 1);
+            JSONObject tmp = new JSONObject();
+            tmp.put("name", currentType.getName());
+            tmp.put("score_rates", score_rates[type_index - 1]);
+            sortJson.add(tmp);
+        }
+        Collections.sort(sortJson, new Comparator<JSONObject>() {//排序
+            @Override
+            public int compare(JSONObject o1, JSONObject o2) {
+                if (o1.getDouble("score_rates") < o2.getDouble("score_rates")) {
+                    return 1;
+                } else if (o1.getDouble("score_rates") > o2.getDouble("score_rates")) {
+                    return -1;
+                } else {
+                    return 0;
+                }
+            }
+        });
+        for (JSONObject jsonObject : sortJson) {
+            suggest += jsonObject.getString("name") + ",";
+        }
+        if (StringUtils.isNotEmpty(suggest)) {
+            suggest = suggest.substring(0, suggest.length() - 1);
+        }
+        result.put("tableInfo", tableInfo);
+        result.put("suggest", suggest);
+        return result;
+    }
+
+    public double saveTwoNumber(double number) {
+        String percentStr = number + "";
+        if (percentStr.length() > 5) {
+            percentStr = percentStr.substring(0, Integer.valueOf(percentStr.indexOf(".")) + 2);
+            number = Double.valueOf(percentStr);
+        }
+        return number;
     }
 }

@@ -42,12 +42,26 @@
         select * from tb_type t where t.id=#{id}
     </select>
 
+    <select id="getAllExaminationName" resultType="java.lang.String" parameterType="com.alibaba.fastjson.JSONObject">
+        select t.examination_name from tb_statistics t group by t.examination_name
+    </select>
+
     <select id="getAllCountPercentLineBar" resultType="com.alibaba.fastjson.JSONObject">
         select sum(t.Correct_number) as "right",sum(t.total) as "total",t.finish_date from tb_statistics t group by t.finish_date order by t.finish_date asc
     </select>
 
     <select id="getMaxTypeLevel" parameterType="com.alibaba.fastjson.JSONObject" resultType="java.lang.Integer">
       select max(level) as maxLevel from tb_type
+    </select>
+
+    <select id="getTableInfoData" parameterType="com.alibaba.fastjson.JSONObject" resultType="com.alibaba.fastjson.JSONObject">
+        select sum(t.Correct_number) as "correct_number",sum(t.total) as "total",sum(t.finish_time) as "finish_time"
+        from tb_statistics t
+        where t.examination_name=#{examination_name}
+        and t.type_id in
+        <foreach collection="typeIds" index="index" item="item" open="(" separator="," close=")">
+            #{item}
+        </foreach>
     </select>
 
     <insert id="addNewData" parameterType="com.alibaba.fastjson.JSONObject">

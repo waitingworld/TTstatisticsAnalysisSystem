@@ -16,6 +16,12 @@ define(['app'],function (baseApp) {
         factory.getLineBarOptions = function(postDate){
             return factory.sendData("baseController/getLineBarOptions",postDate);
         }
+        factory.getAllExaminationName = function(postDate){
+            return factory.sendData("baseController/getAllExaminationName",postDate);
+        }
+        factory.getAnalyzeData = function(postDate){
+            return factory.sendData("baseController/getAnalyzeData",postDate);
+        }
         factory.sendData = function (url, params) {
             var defer = $q.defer();
             $http({

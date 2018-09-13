@@ -28,31 +28,20 @@
                 </tr>
                 </thead>
                 <tbody>
-                <tr>
-                    <td>1</td>
-                    <td>数量关系</td>
-                    <td>11</td>
-                    <td>32</td>
-                    <td>1</td>
-                    <td>10</td>
-                    <td>45%</td>
-                    <td>12</td>
-                    <td>2</td>
-                </tr>
-                <tr>
-                    <td>2</td>
-                    <td>言语理解</td>
-                    <td>43</td>
-                    <td>55</td>
-                    <td>0.5</td>
-                    <td>60</td>
-                    <td>86%</td>
-                    <td>45</td>
-                    <td>1</td>
+                <tr ng-repeat="item in tableInfo">
+                    <td>{{$index+1}}</td>
+                    <td>{{item.type_name}}</td>
+                    <td>{{item.right}}</td>
+                    <td>{{item.total}}</td>
+                    <td>{{item.score_per_question}}</td>
+                    <td>{{item.time}}</td>
+                    <td>{{item.right_percent}}</td>
+                    <td>{{item.score}}</td>
+                    <td>{{item.score_rate}}</td>
                 </tr>
                 </tbody>
             </table>
-            根据上述数据计算,推荐你的做题顺序为:<strong>{{"数量关系,言语理解,常识判断"}}</strong>
+            根据上述数据计算,推荐你的做题顺序为:<strong>{{suggest}}</strong>时获得最高分
         </div>
     </div>
 </div>

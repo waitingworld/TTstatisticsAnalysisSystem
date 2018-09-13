@@ -94,4 +94,36 @@ public class BaseController {
         result.put("success", true);
         return result;
     }
+
+    @ResponseBody
+    @RequestMapping("/getAllExaminationName")
+    public JSONObject getAllExaminationName(@RequestBody JSONObject data, HttpServletRequest request) {
+        logger.info("baseController:getAllExaminationName,{}", data.toJSONString());
+        JSONObject result = new JSONObject();
+        try {
+            List<String> names = baseService.getAllExaminationName(data);
+            result.put("names", names);
+        } catch (RuntimeException e) {
+            e.printStackTrace();
+            result.put("success", false);
+        }
+        result.put("success", true);
+        return result;
+    }
+
+    @ResponseBody
+    @RequestMapping("/getAnalyzeData")
+    public JSONObject getAnalyzeData(@RequestBody JSONObject data, HttpServletRequest request) {
+        logger.info("baseController:getAnalyzeData,{}", data.toJSONString());
+        JSONObject result = new JSONObject();
+        try {
+            JSONObject analyzeResult = baseService.getAnalyzeData(data);
+            result.put("analyzeResult", analyzeResult);
+        } catch (RuntimeException e) {
+            e.printStackTrace();
+            result.put("success", false);
+        }
+        result.put("success", true);
+        return result;
+    }
 }

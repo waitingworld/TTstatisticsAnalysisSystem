@@ -45,4 +45,18 @@ public interface BaseService {
      * @return
      */
     JSONObject getLineBarOptions(JSONObject data);
+
+    /**
+     * 获取所有试卷名
+     * @param data
+     * @return
+     */
+    List<String> getAllExaminationName(JSONObject data);
+
+    /**
+     * 获取分析数据
+     * @param data
+     * @return
+     */
+    JSONObject getAnalyzeData(JSONObject data);
 }
