@@ -13,6 +13,8 @@ requirejs.config({
         "uiRouter": "./external_library/angular/angular-ui-router",
         "domReady": "./external_library/require/domReady",
         "jquery": "./external_library/jquery/jquery-3.3.1",
+        "toastr": "./external_library/toastr/toastr.min",
+        "toastr-css": "./external_library/toastr/toastr.min",
         "bootstrap": "./external_library/bootstrap/bootstrap.min",
         "echarts": "./external_library/echarts/echarts",
         "bootstrap-css": "./external_library/bootstrap/bootstrap",
@@ -68,6 +70,10 @@ requirejs.config({
         'uiRouter': {
             deps: ['angular'],
             exports: 'angular-route'
+        },
+        'toastr': {
+            deps: ['jquery','css!./toastr-css'],
+            exports: 'toastr'
         },
         'angularAMD': ['angular', 'uiRouter'],
         'ngLoad': {
