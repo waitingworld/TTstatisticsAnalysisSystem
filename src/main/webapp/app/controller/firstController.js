@@ -6,7 +6,7 @@ define(['app', 'baseService', 'baseDirective', 'bootstrap', 'bootstrap-table-zh-
         $scope.tableInfo = [];
         $scope.$watch("examination_names", function () {
             if ($scope.examination_names.length > 0) {
-                $scope.model.examination_name = $scope.examination_names[0];
+                $scope.model.examination_name = $scope.examination_names[$scope.examination_names.length-1];
             }
         });
         $scope.$watch("model.examination_name", function (examination_name) {
@@ -17,9 +17,9 @@ define(['app', 'baseService', 'baseDirective', 'bootstrap', 'bootstrap-table-zh-
                 var promise = baseService.getAnalyzeData(params);
                 promise.then(function (data) {
                     if (data.success) {
-                        debugger
                         $scope.tableInfo = data.analyzeResult.tableInfo;
                         $scope.suggest = data.analyzeResult.suggest;
+                        $scope.max_score = data.analyzeResult.max_score;
                     }
                 });
             }
@@ -30,6 +30,7 @@ define(['app', 'baseService', 'baseDirective', 'bootstrap', 'bootstrap-table-zh-
             var promise = baseService.getAllExaminationName(params);
             promise.then(function (data) {
                 if (data.success) {
+                    data.names.push("全部");
                     $scope.examination_names = data.names;
                 }
             });

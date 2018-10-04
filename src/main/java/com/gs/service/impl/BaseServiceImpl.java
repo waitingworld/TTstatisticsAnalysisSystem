@@ -302,6 +302,7 @@ public class BaseServiceImpl implements BaseService {
         double[] value = new double[types.size()];//放得分
         double[] score_rates = new double[types.size()];//放得分率
         int maxWeight = 120;//一张试卷的总时间
+        Integer count_number = 0;
         for (int index = 0; index < types.size(); index++) {
             Type type = types.get(index);
             double score_per_question = 0;
@@ -325,9 +326,12 @@ public class BaseServiceImpl implements BaseService {
             JSONObject tmpResult = new JSONObject();
             typeIds = getChildTypeId(type, maxTypeLevel);
             JSONObject tableParams = new JSONObject();
-            tableParams.put("examination_name", examination_name);
             tableParams.put("typeIds", typeIds);
-            JSONObject tableInfoData = baseMapper.getTableInfoData(tableParams);
+            JSONObject tableInfoData = null;
+            if (!examination_name.equals("全部")) {
+                tableParams.put("examination_name", examination_name);
+            }
+            tableInfoData = baseMapper.getTableInfoData(tableParams);
             if (tableInfoData == null) {
                 types.remove(index);
                 index--;
@@ -336,7 +340,10 @@ public class BaseServiceImpl implements BaseService {
             Integer right = tableInfoData.getInteger("correct_number");
             Integer total = tableInfoData.getInteger("total");
             Integer time = tableInfoData.getInteger("finish_time");
-
+            if (tableInfoData.containsKey("count_number")) {
+                count_number = tableInfoData.getInteger("count_number");
+                maxWeight = 120 * count_number;
+            }
             tmpResult.put("type_name", type.getName());//类型名
             tmpResult.put("right", right);//正确题数
             tmpResult.put("total", total);//总题数
@@ -351,7 +358,9 @@ public class BaseServiceImpl implements BaseService {
             score_rates[index] = score_rate;
             value[index] = (right * score_per_question);
         }
-        List<Integer> resultList = AlgorithmUtils.bestResult(weight, value, maxWeight);
+        JSONObject resultJSON = AlgorithmUtils.bestResult(weight, value, maxWeight);
+        List<Integer> resultList = (List<Integer>) resultJSON.get("resultList");//获取推荐做题的顺序
+        Double max_score = resultJSON.getDouble("max_score");//获取最大可以获取的分数
         List<JSONObject> sortJson = new ArrayList<>();
         for (Integer type_index : resultList) {//拼装排序数据
             Type currentType = types.get(type_index - 1);
@@ -380,9 +389,16 @@ public class BaseServiceImpl implements BaseService {
         }
         result.put("tableInfo", tableInfo);
         result.put("suggest", suggest);
+        result.put("max_score", saveTwoNumber(max_score/count_number));
         return result;
     }
 
+    /**
+     * 保存两位小数
+     *
+     * @param number
+     * @return
+     */
     public double saveTwoNumber(double number) {
         String percentStr = number + "";
         if (percentStr.length() > 5) {

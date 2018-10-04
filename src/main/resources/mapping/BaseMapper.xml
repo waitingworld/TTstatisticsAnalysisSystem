@@ -43,7 +43,7 @@
     </select>
 
     <select id="getAllExaminationName" resultType="java.lang.String" parameterType="com.alibaba.fastjson.JSONObject">
-        select t.examination_name from tb_statistics t group by t.examination_name
+        select t.examination_name from tb_statistics t group by t.examination_name order by examination_name
     </select>
 
     <select id="getAllCountPercentLineBar" resultType="com.alibaba.fastjson.JSONObject">
@@ -55,13 +55,22 @@
     </select>
 
     <select id="getTableInfoData" parameterType="com.alibaba.fastjson.JSONObject" resultType="com.alibaba.fastjson.JSONObject">
-        select sum(t.Correct_number) as "correct_number",sum(t.total) as "total",sum(t.finish_time) as "finish_time"
+        select
+            sum(t.Correct_number) as "correct_number",
+            sum(t.total) as "total",
+            sum(t.finish_time) as "finish_time",
+            count(t.finish_time) as "count_number"
         from tb_statistics t
-        where t.examination_name=#{examination_name}
+        where
+        <trim prefixOverrides="and">
+        <if test="examination_name!=null and examination_name!=''">
+            and t.examination_name=#{examination_name}
+        </if>
         and t.type_id in
         <foreach collection="typeIds" index="index" item="item" open="(" separator="," close=")">
             #{item}
         </foreach>
+        </trim>
     </select>
 
     <insert id="addNewData" parameterType="com.alibaba.fastjson.JSONObject">
