@@ -126,4 +126,11 @@ public class BaseController {
         result.put("success", true);
         return result;
     }
+
+    @ResponseBody
+    @RequestMapping("/addExaminationData")
+    public JSONObject addExaminationData(@RequestBody JSONObject data, HttpServletRequest request) {
+        logger.info("baseController:addExaminationData,{}", data.toJSONString());
+        return baseService.addExaminationData(data);
+    }
 }

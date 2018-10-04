@@ -59,4 +59,11 @@ public interface BaseService {
      * @return
      */
     JSONObject getAnalyzeData(JSONObject data);
+
+    /**
+     * 批量添加统计数据,用于一次添加一张试卷的数据
+     * @param data
+     * @return
+     */
+    JSONObject addExaminationData(JSONObject data);
 }

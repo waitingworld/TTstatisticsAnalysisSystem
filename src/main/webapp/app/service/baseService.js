@@ -19,6 +19,9 @@ define(['app'],function (baseApp) {
         factory.getAllExaminationName = function(postDate){
             return factory.sendData("baseController/getAllExaminationName",postDate);
         }
+        factory.addExaminationData = function(postDate){
+            return factory.sendData("baseController/addExaminationData",postDate);
+        }
         factory.getAnalyzeData = function(postDate){
             return factory.sendData("baseController/getAnalyzeData",postDate);
         }

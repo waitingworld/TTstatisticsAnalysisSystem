@@ -46,6 +46,37 @@ public class BaseServiceImpl implements BaseService {
     }
 
     @Override
+    public JSONObject addExaminationData(JSONObject data) {
+        JSONObject result = new JSONObject();
+        String examination_name = data.getString("examination_name");
+        Date finish_data = data.getDate("finish_data");
+        List<HashMap<String, String>> children = (List<HashMap<String, String>>) data.get("children");
+        for (HashMap<String, String> child : children) {
+            JSONObject param = new JSONObject();
+            param.put("id", UUID.randomUUID().toString().replaceAll("-", ""));
+            param.put("type_id", child.get("type_id"));
+            param.put("total", child.get("total_number"));
+            if (finish_data != null) {
+                param.put("finish_data", DateUtils.formatDateToStr(finish_data, "yyyy-MM-dd"));
+            }
+            param.put("finish_time", child.get("finish_time"));
+            param.put("Correct_number", child.get("right_number"));
+            param.put("examination_name", examination_name);
+            try {
+                baseMapper.addNewData(param);
+            } catch (Exception e) {
+                e.printStackTrace();
+                logger.error("addExaminationData fail:" + param.toJSONString());
+                result.put("success", false);
+                return result;
+            }
+
+        }
+        result.put("success", true);
+        return result;
+    }
+
+    @Override
     public List<Type> getNextTypes(JSONObject data) {
         List<Type> types = baseMapper.getNextTypes(data);
         return types;
@@ -389,7 +420,7 @@ public class BaseServiceImpl implements BaseService {
         }
         result.put("tableInfo", tableInfo);
         result.put("suggest", suggest);
-        result.put("max_score", saveTwoNumber(max_score/count_number));
+        result.put("max_score", saveTwoNumber(max_score / count_number));
         return result;
     }
 
