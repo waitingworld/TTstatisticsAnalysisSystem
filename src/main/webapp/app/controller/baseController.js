@@ -2,7 +2,7 @@ define(['app', 'angular', 'baseService', 'baseDirective', 'pageDirective', 'jque
     function (webapp) {//主控制器
         webapp
             .controller('baseController', function ($scope, baseService, $interval, $uibModal) {
-                
+
                 console.log("baseController");
                 $scope.data = {};
                 $scope.getTypeMap = function () {
@@ -97,11 +97,11 @@ define(['app', 'angular', 'baseService', 'baseDirective', 'pageDirective', 'jque
                 });
 
                 $scope.ok = function () {
-                    
+
                     $uibModalInstance.close();
                 };
                 $scope.cancel = function () {
-                    
+
                     $uibModalInstance.dismiss('cancel');
                 };
             })
@@ -565,6 +565,13 @@ define(['app', 'angular', 'baseService', 'baseDirective', 'pageDirective', 'jque
                     $('.buttonText' + type.level + "_" + item.id).text(type.name);
                     $scope.getNextTypes(type.level, item);
                 }
+                $scope.remove = function (item) {
+                    angular.forEach($scope.model.children, function (childrenItem, index) {
+                        if (childrenItem.id == item.id) {
+                            $scope.model.children.splice(index, 1);
+                        }
+                    });
+                }
                 $scope.getNextTypes = function (currentLevel, item) {
                     var level = currentLevel + 1;
                     var params = {
@@ -584,9 +591,7 @@ define(['app', 'angular', 'baseService', 'baseDirective', 'pageDirective', 'jque
                     });
                 };
                 $scope.ok = function () {
-                    
-                    if (angular.isDefined($scope.model.children)
-                    &&angular.isDefined($scope.model.finish_time)) {
+                    if (angular.isDefined($scope.model.children) && angular.isDefined($scope.model.finish_data)) {
                         $scope.model.examination_name = $scope.model.year + "年" + $scope.model.area + $scope.model.examine_type;
                         $uibModalInstance.close($scope.model);
                     } else {

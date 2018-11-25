@@ -94,9 +94,12 @@
                         <input type="number" ng-model="item.total_number" class="form-control pull-left"
                                placeholder="总题数">
                     </td>
-                    <td colspan="2" style="white-space: nowrap">
+                    <td colspan="1" style="white-space: nowrap">
                         <input type="number" ng-model="item.finish_time" class="form-control pull-left"
                                placeholder="使用时间(分钟)">
+                    </td>
+                    <td colspan="1" style="white-space: nowrap" ng-click="remove(item)">
+                        <i class="icon-remove"></i>
                     </td>
                 </tr>
                 </tbody>
