@@ -572,6 +572,7 @@ define(['app', 'angular', 'baseService', 'baseDirective', 'pageDirective', 'jque
                         }
                     });
                 }
+
                 $scope.getNextTypes = function (currentLevel, item) {
                     var level = currentLevel + 1;
                     var params = {
