@@ -7,6 +7,7 @@ import com.gs.model.Type;
 import com.gs.service.BaseService;
 import com.gs.utils.AlgorithmUtils;
 import com.gs.utils.DateUtils;
+import com.gs.utils.ThreadPoolUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -15,6 +16,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
+import java.util.concurrent.ExecutionException;
 
 @Service(value = "baseService")
 @Transactional(rollbackFor = Exception.class)
@@ -141,19 +143,36 @@ public class BaseServiceImpl implements BaseService {
         }
         JSONObject nodeParam = new JSONObject();
         List<Type> allTypes = baseMapper.getNextTypes(nodeParam);
+        JSONObject threadTaskParams = new JSONObject();
+        threadTaskParams.put("threadSize", 100);
+        List<JSONObject> taskParams = new ArrayList<>();
         for (Type type : allTypes) {
-            JSONObject node = createNode(type, maxTypeLevel);
+            JSONObject tmp = new JSONObject();
+            tmp.put("type", type);
+            tmp.put("maxTypeLevel", maxTypeLevel);
+            taskParams.add(tmp);
+        }
+        threadTaskParams.put("taskParams", taskParams);
+        List<JSONObject> nodes = null;
+        try {
+            nodes = ThreadPoolUtils.creatThreadTask(threadTaskParams);
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        for (JSONObject node : nodes) {
             if (node == null) {
                 continue;
             }
             series_item_data.add(node);
             JSONObject edges_data_item = new JSONObject();
-            if (type.getLevel() == 1) {
+            if (node.getInteger("level") == 1) {
                 edges_data_item.put("source", "0");
             } else {
-                edges_data_item.put("source", type.getParentId());
+                edges_data_item.put("source", node.getString("parentId"));
             }
-            edges_data_item.put("target", type.getId());
+            edges_data_item.put("target", node.getString("id"));
             edges.add(edges_data_item);
         }
         series_item.put("type", "graph");
@@ -194,7 +213,7 @@ public class BaseServiceImpl implements BaseService {
      * @param type
      * @return
      */
-    private JSONObject createNode(Type type, Integer maxTypeLevel) {
+    public JSONObject createNode(Type type, Integer maxTypeLevel) {
         JSONObject node = new JSONObject();
         Integer total = 0;
         Integer right = 0;
@@ -231,6 +250,7 @@ public class BaseServiceImpl implements BaseService {
         textStyle.put("fontSize", "18");
         label.put("textStyle", textStyle);
         node.put("label", label);
+        node.put("parentId", type.getParentId());
         node.put("category", type.getLevel());//节点对应的分组
 
         return node;

@@ -66,4 +66,12 @@ public interface BaseService {
      * @return
      */
     JSONObject addExaminationData(JSONObject data);
+
+    /**
+     * 生成一个节点
+     * @param type
+     * @param maxTypeLevel
+     * @return
+     */
+    JSONObject createNode(Type type, Integer maxTypeLevel);
 }
