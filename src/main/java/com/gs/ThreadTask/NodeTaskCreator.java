@@ -4,14 +4,14 @@ import com.alibaba.fastjson.JSONObject;
 import com.gs.model.Type;
 import com.gs.service.BaseService;
 import com.gs.utils.BeanContext;
-import javafx.application.Application;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationContext;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.concurrent.Callable;
 
 public class NodeTaskCreator implements Callable<JSONObject> {
     private JSONObject params;
+    private Logger logger = LoggerFactory.getLogger(NodeTaskCreator.class);
 
     private BaseService baseService;
 
@@ -24,7 +24,7 @@ public class NodeTaskCreator implements Callable<JSONObject> {
         Type type = (Type) params.get("type");
         Integer maxTypeLevel = params.getInteger("maxTypeLevel");
         JSONObject node = baseService.createNode(type, maxTypeLevel);
-        System.out.printf("线程:%s, %s\n", Thread.currentThread().getName(), "任务完成");
+        logger.info("线程:" + Thread.currentThread().getName() + ", 任务完成");
         return node;
     }
 
