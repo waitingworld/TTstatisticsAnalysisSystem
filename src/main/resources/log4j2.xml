@@ -60,9 +60,9 @@
 
     <Loggers>
         <!--过滤掉spring和mybatis的一些无用的DEBUG信息-->
-        <logger name="org.springframework" level="INFO"></logger>
-        <logger name="org.mybatis" level="INFO"></logger>
-        <Root level="INFO">
+        <logger name="org.springframework" level="ERROR"></logger>
+        <logger name="org.mybatis" level="ERROR"></logger>
+        <Root level="INFO"><!--开发的时候修改这里的日志级别为TRACE即可查看MyBatis的查询语句-->
             <AppenderRef ref="traceInfoFile"/><!--输出到日志文件-->
             <AppenderRef ref="Console"/><!--输出到控制台-->
             <!--<AppenderRef ref="infoFile"/>-->
