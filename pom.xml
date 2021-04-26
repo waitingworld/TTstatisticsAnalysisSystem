@@ -233,7 +233,7 @@
         <dependency>
             <groupId>commons-io</groupId>
             <artifactId>commons-io</artifactId>
-            <version>2.6</version>
+            <version>2.7</version>
         </dependency>
 
         <!--Commons Codec提供了一些公共的编解码实现，比如Base64, Hex, MD5,Phonetic and URLs等等。-->
