@@ -20,7 +20,7 @@
         <mybatis.version>3.4.6</mybatis.version>
 
         <!-- mysql驱动版本号 -->
-        <mysql-driver.version>8.0.11</mysql-driver.version>
+        <mysql-driver.version>8.0.28</mysql-driver.version>
 
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
